@@ -1,0 +1,9 @@
+# dependencies
+node_modules/
+
+# local env
+.env
+
+# os / editor
+.DS_Store
+*.log

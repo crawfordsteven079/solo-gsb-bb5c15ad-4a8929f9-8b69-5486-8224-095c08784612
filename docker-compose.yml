@@ -1,0 +1,41 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${PGUSER:-callboard}
+      POSTGRES_PASSWORD: ${PGPASSWORD:-callboard}
+      POSTGRES_DB: ${PGDATABASE:-callboard}
+    volumes:
+      # 数据保存在本地：命名卷持久化数据库文件
+      - pgdata:/var/lib/postgresql/data
+      # 首次初始化时自动建表并写入种子数据
+      - ./db/init:/docker-entrypoint-initdb.d:ro
+    ports:
+      # 如需从主机直接连接数据库可开启；默认仅容器内访问
+      - "${PGPORT_HOST:-127.0.0.1:55432}:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${PGUSER:-callboard} -d ${PGDATABASE:-callboard}"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  app:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      PGHOST: db
+      PGPORT: 5432
+      PGUSER: ${PGUSER:-callboard}
+      PGPASSWORD: ${PGPASSWORD:-callboard}
+      PGDATABASE: ${PGDATABASE:-callboard}
+      PORT: 3000
+    ports:
+      # 浏览器访问地址：http://localhost:${WEB_PORT:-8080}
+      - "${WEB_PORT:-8080}:3000"
+
+volumes:
+  pgdata:

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Call Board · 舞台监督执行台</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="#/">
+        <span class="brand-mark">🎭</span>
+        <span>
+          <strong>CALL BOARD</strong>
+          <small>舞台监督 · 排演与现场执行</small>
+        </span>
+      </a>
+      <div class="operator-box">
+        <label for="operator-select">当前操作人</label>
+        <select id="operator-select" title="选择当前操作人"></select>
+        <button class="btn btn-ghost" id="btn-new-operator" type="button">＋ 新建</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="view" class="view"></main>
+
+  <div id="modal-root" class="modal-root hidden">
+    <div class="modal-backdrop" data-action="close-modal"></div>
+    <div class="modal" role="dialog" aria-modal="true">
+      <div class="modal-head">
+        <h3 id="modal-title"></h3>
+        <button class="modal-close" type="button" data-action="close-modal">×</button>
+      </div>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+
+  <div id="toast-root" class="toast-root"></div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
